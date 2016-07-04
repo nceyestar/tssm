@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="/">
+
+	<select id="findAuthorById" parameterType="int" resultType="com.zj.entity.Poets">
+		select * from poets where id=#{id}
+	</select>
+
+
+	<select id="findTsByContext" parameterType="String" resultType="com.zj.entity.Poetries">
+		select * from poetries where content like #{content}
+	</select>
+
+
+	<resultMap id="PoetriesMap" type="com.zj.entity.Poetries">
+		<id property="id" column="poetries.id" />
+		<result property="content" column="content" />
+		<result property="title" column="title" />
+		<result property="createdAt" column="created_at" />
+		<result property="updatedAt" column="update_at" />
+		<association property="poets" column="poet_id" javaType="com.zj.entity.Poets">
+			<id property="id" column="poets.id" />
+			<result property="name" column="name" />
+			<result property="createAt" column="create_at" />
+			<result property="updateAt" column="update_at" />
+		</association>
+
+	</resultMap>
+
+	<resultMap type="com.zj.entity.Poets" id="poetsMap">
+		<id property="id" column="poets.id" />
+		<result property="name" column="name" />
+		<result property="createAt" column="create_at" />
+		<result property="updateAt" column="update_at" />
+	</resultMap>
+
+	<select id="findTsByAuthor" parameterType="String" resultMap="PoetriesMap">
+		select *  from poetries inner join poets on poets.id=poetries.poet_id where poets.name=#{author}
+
+	</select>
+
+	<select id="findTsByTitle" parameterType="String" resultMap="PoetriesMap">
+		select *  from poetries inner join poets on poets.id=poetries.poet_id where poetries.title like #{title}
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
